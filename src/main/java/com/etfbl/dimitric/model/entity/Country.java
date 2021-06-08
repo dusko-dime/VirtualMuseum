@@ -1,80 +1,23 @@
 package com.etfbl.dimitric.model.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
+@Data
 @Entity
-@Table(name = "country")
 public class Country {
+    @Id@Column(name = "id", nullable = false)
     private Integer id;
+    @Basic@Column(name = "code", nullable = false, length = 3)
     private String code;
+    @Basic@Column(name = "name", nullable = false, length = 100)
     private String name;
+    @Basic@Column(name = "active", nullable = false)
     private Byte active;
-    private Collection<City> citiesById;
+    @OneToMany(mappedBy = "country")
+    private List<City> cities;
 
-    @Id
-    @Column(name = "id", nullable = false)
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    @Basic
-    @Column(name = "code", nullable = false, length = 3)
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    @Basic
-    @Column(name = "name", nullable = false, length = 100)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Basic
-    @Column(name = "active", nullable = false)
-    public Byte getActive() {
-        return active;
-    }
-
-    public void setActive(Byte active) {
-        this.active = active;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Country country = (Country) o;
-        return Objects.equals(id, country.id) &&
-                Objects.equals(code, country.code) &&
-                Objects.equals(name, country.name) &&
-                Objects.equals(active, country.active);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, code, name, active);
-    }
-
-    @OneToMany(mappedBy = "countryByCountryId")
-    public Collection<City> getCitiesById() {
-        return citiesById;
-    }
-
-    public void setCitiesById(Collection<City> citiesById) {
-        this.citiesById = citiesById;
-    }
 }
