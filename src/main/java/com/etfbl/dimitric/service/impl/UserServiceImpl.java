@@ -1,5 +1,6 @@
 package com.etfbl.dimitric.service.impl;
 
+import com.etfbl.dimitric.exceptions.NotFoundException;
 import com.etfbl.dimitric.model.dto.UserCreateRequestDTO;
 import com.etfbl.dimitric.model.dto.UserDTO;
 import com.etfbl.dimitric.model.entity.User;
@@ -44,5 +45,15 @@ public class UserServiceImpl implements UserService {
         emailSender.sendMimeMessage(user.getEmail(), "Welcome", mailBody);
 
         return modelMapper.map(savedUser, UserDTO.class);
+    }
+
+    @Override
+    public User getByUsername(String username) {
+        User user = userRepository.getByUsernameAndActive(username, (byte)1);
+        if(user != null) {
+            return user;
+        } else {
+            throw new NotFoundException();
+        }
     }
 }
