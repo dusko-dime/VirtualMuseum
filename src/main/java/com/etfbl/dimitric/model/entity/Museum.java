@@ -10,6 +10,7 @@ import java.util.Objects;
 @Entity
 public class Museum {
     @Id@Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Basic@Column(name = "name", nullable = false, length = 100)
     private String name;

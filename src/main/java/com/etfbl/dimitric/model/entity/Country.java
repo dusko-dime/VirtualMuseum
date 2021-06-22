@@ -10,6 +10,7 @@ import java.util.Objects;
 @Entity
 public class Country {
     @Id@Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Basic@Column(name = "code", nullable = false, length = 3)
     private String code;

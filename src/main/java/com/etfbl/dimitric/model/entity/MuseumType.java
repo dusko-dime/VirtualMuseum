@@ -11,6 +11,7 @@ import java.util.Objects;
 @Table(name = "museum_type", schema = "museum", catalog = "")
 public class MuseumType {
     @Id@Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Basic@Column(name = "name", nullable = false, length = 45)
     private String name;
