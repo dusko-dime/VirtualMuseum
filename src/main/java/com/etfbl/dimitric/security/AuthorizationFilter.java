@@ -61,8 +61,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             return null;
         }
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userId,null, null);
-//        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userId,null, Collections.singletonList(new SimpleGrantedAuthority(claims.get("user_group", String.class))));
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userId,null, Collections.singletonList(new SimpleGrantedAuthority(claims.get("user_group", String.class))));
         authentication.setDetails(claims);
 
         return authentication;

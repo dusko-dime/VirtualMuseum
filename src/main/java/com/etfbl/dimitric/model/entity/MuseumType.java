@@ -17,7 +17,7 @@ public class MuseumType {
     private String name;
     @Basic@Column(name = "active", nullable = false, length = 45)
     private String active;
-    @OneToMany(mappedBy = "museumType")
-    private List<Museum> museums;
+//    @OneToMany(mappedBy = "museumType")
+//    private List<Museum> museums;
 
 }

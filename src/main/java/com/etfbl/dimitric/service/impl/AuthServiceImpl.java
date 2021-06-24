@@ -116,6 +116,7 @@ public class AuthServiceImpl implements AuthService {
                 .claim(Constants.FIRST_NAME, firstName)
                 .claim(Constants.LAST_NAME, lastName)
                 .claim(Constants.USERNAME, username)
+                .claim(Constants.USER_GROUP, "REGISTERED_USER")
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpirationTime))
                 .signWith(SignatureAlgorithm.HS512, secretToken)
                 .compact();

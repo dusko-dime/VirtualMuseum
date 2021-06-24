@@ -1,0 +1,11 @@
+{
+  "rules": [
+    {
+      "methods": ["GET"],
+      "pattern": "/museums",
+      "roles": [
+        "REGISTERED_USER"
+      ]
+    }
+  ]
+}

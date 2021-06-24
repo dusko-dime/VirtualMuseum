@@ -2,11 +2,15 @@ package com.etfbl.dimitric.security;
 
 import com.etfbl.dimitric.security.config.RestAccessDeniedHandler;
 import com.etfbl.dimitric.security.config.RestAuthenticationEntryPoint;
+import com.etfbl.dimitric.security.model.AuthorizationRules;
+import com.etfbl.dimitric.security.model.Rule;
 import com.etfbl.dimitric.security.service.UserSecurityService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -45,11 +49,20 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     }
 
     private HttpSecurity createAuthorizationRules(HttpSecurity http) throws Exception {
+        AuthorizationRules authorizationRules = new ObjectMapper().readValue(new ClassPathResource("rules.json").getInputStream(), AuthorizationRules.class);
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry interceptor = http.authorizeRequests();
 
         interceptor = interceptor.antMatchers(HttpMethod.POST, environment.getProperty("login.url.path")).permitAll()
                 .antMatchers(HttpMethod.POST, environment.getProperty("refresh.url.path")).permitAll()
                 .antMatchers(HttpMethod.POST, "/users/register").permitAll();
+
+        for (Rule rule : authorizationRules.getRules()) {
+            if (rule.getMethods().isEmpty())
+                interceptor = interceptor.antMatchers(rule.getPattern()).hasAnyAuthority(rule.getRoles().toArray(String[]::new));
+            else for (String method : rule.getMethods()) {
+                interceptor = interceptor.antMatchers(HttpMethod.resolve(method), rule.getPattern()).hasAnyAuthority(rule.getRoles().toArray(String[]::new));
+            }
+        }
 
         return interceptor.anyRequest().denyAll().and().logout()
                 .logoutUrl("/logout").and();
